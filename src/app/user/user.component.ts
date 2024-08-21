@@ -1,4 +1,4 @@
-import { Component } from '@angular/core';
+import { Component, Input } from '@angular/core';
 import { DUMMY_USERS } from '../dummy-users';
 
 const randomIndex = Math.floor(Math.random() * DUMMY_USERS.length);
@@ -10,15 +10,16 @@ const randomIndex = Math.floor(Math.random() * DUMMY_USERS.length);
   styleUrl: './user.component.css',
 })
 export class UserComponent {
-  slecetedUser = DUMMY_USERS[randomIndex];
-
+  // slecetedUser = DUMMY_USERS[randomIndex];
+  @Input() name!: string;
+  @Input() avatar!: string;
   get imagePath() {
-    return `assets/users/${this.slecetedUser.avatar}`;
+    return `assets/users/${this.avatar}`;
   }
 
   onSelectedUser() {
-    const randomIndex = Math.floor(Math.random() * DUMMY_USERS.length);
-    this.slecetedUser = DUMMY_USERS[randomIndex];
+    // const randomIndex = Math.floor(Math.random() * DUMMY_USERS.length);
+    // this.slecetedUser = DUMMY_USERS[randomIndex];
     // console.log(this.slecetedUser.name);
   }
 }
