@@ -1,11 +1,13 @@
-import { Component, Input } from '@angular/core';
+import { Component, EventEmitter, Input, Output } from '@angular/core';
 import { DUMMY_USERS } from '../dummy-users';
 import { TaskComponent } from './task/task.component';
+import { AddtaskComponent } from '../addtask/addtask.component';
+import { NewTask } from './task/models/task.models';
 
 @Component({
   selector: 'app-tasks',
   standalone: true,
-  imports: [TaskComponent],
+  imports: [TaskComponent, AddtaskComponent],
   templateUrl: './tasks.component.html',
   styleUrl: './tasks.component.css',
 })
@@ -14,6 +16,9 @@ export class TasksComponent {
 
   @Input({ required: true }) userName!: string;
   @Input({ required: true }) userId!: string;
+  @Output() addTask = new EventEmitter();
+  isAddingTask: boolean = false;
+
   tasks = [
     {
       id: 'u1',
@@ -46,5 +51,29 @@ export class TasksComponent {
 
   removeTask(id: string) {
     this.tasks = this.tasks.filter((task) => task.id !== id);
+  }
+
+  createTask() {
+    this.isAddingTask = true;
+  }
+
+  onCloseDialog() {
+    this.isAddingTask = false;
+  }
+
+  handleSubmit(taskData: NewTask) {
+    this.tasks.push({
+      id: 'u1',
+      userId: 'u1',
+      title: taskData.title,
+      summary: taskData.summary,
+      dueDate: taskData.date,
+    });
+
+    this.isAddingTask = false;
+
+    console.log(taskData);
+
+    console.log(this.tasks);
   }
 }

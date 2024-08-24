@@ -1,17 +1,23 @@
+@if (isAddingTask) {
+
+<app-addtask (cancel)="onCloseDialog()" (newTask)="handleSubmit($event)" />
+}
+
 <section id="tasks">
     <header>
         <h2>{{userName}} 's task</h2>
     </header>
     <menu>
-        <button>Add task</button>
+        <button (click)="createTask()">Add task</button>
     </menu>
     <ul>
-        @for (task of selectedUser; track $index) {
+        @for (task of selectedUser; track task.id) {
 
         <li>
-            <app-task (complete)="removeTask(task.id)" [task]="task" />
+            <app-task (complete)="removeTask($event)" [task]="task" />
         </li>
         }
 
     </ul>
+
 </section>
