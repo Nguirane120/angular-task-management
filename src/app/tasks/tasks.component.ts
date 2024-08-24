@@ -3,6 +3,7 @@ import { DUMMY_USERS } from '../dummy-users';
 import { TaskComponent } from './task/task.component';
 import { AddtaskComponent } from '../addtask/addtask.component';
 import { NewTask } from './task/models/task.models';
+import { TaskService } from '../task/services/task.service';
 
 @Component({
   selector: 'app-tasks',
@@ -18,39 +19,14 @@ export class TasksComponent {
   @Input({ required: true }) userId!: string;
   @Output() addTask = new EventEmitter();
   isAddingTask: boolean = false;
-
-  tasks = [
-    {
-      id: 'u1',
-      userId: 'u1',
-      title: 'Master Angular',
-      summary:
-        'Learn all the basic and advanced features of Angular & how to apply them.',
-      dueDate: '2025-12-31',
-    },
-    {
-      id: 'u3',
-      userId: 'u3',
-      title: 'Build first prototype',
-      summary: 'Build a first prototype of the online shop website',
-      dueDate: '2024-05-31',
-    },
-    {
-      id: 't3',
-      userId: 'u3',
-      title: 'Prepare issue template',
-      summary:
-        'Prepare and describe an issue template which will help with project management',
-      dueDate: '2024-06-15',
-    },
-  ];
+  constructor(private taskServices: TaskService) {}
 
   get selectedUser() {
-    return this.tasks.filter((task) => task.id === this.userId);
+    return this.taskServices.getUserTasks(this.userId);
   }
 
   removeTask(id: string) {
-    this.tasks = this.tasks.filter((task) => task.id !== id);
+    this.taskServices.removeTask(id);
   }
 
   createTask() {
@@ -62,18 +38,7 @@ export class TasksComponent {
   }
 
   handleSubmit(taskData: NewTask) {
-    this.tasks.push({
-      id: 'u1',
-      userId: 'u1',
-      title: taskData.title,
-      summary: taskData.summary,
-      dueDate: taskData.date,
-    });
-
+    this.taskServices.addTask(taskData, this.userId);
     this.isAddingTask = false;
-
-    console.log(taskData);
-
-    console.log(this.tasks);
   }
 }
